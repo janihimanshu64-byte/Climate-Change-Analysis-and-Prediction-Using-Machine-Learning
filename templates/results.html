@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Predictions & Graphs - Weather Forecast{% endblock %}
+{% block content %}
+<h1 style="color: #38bdf8;">Weather Predictions & Analysis</h1>
+<p style="color: #94a3b8;">Select a year (optional) and which graphs to view, then click Apply.</p>
+
+<div class="card options-card">
+    <form method="get" action="{{ url_for('predict') }}" class="options-form" id="options-form">
+        <div class="option-row">
+            <div class="form-group year-option">
+                <label for="year" class="option-heading">Year</label>
+                <select id="year" name="year" title="Filter data by year (only years in your dataset are listed)">
+                    <option value="all" {{ 'selected' if selected_year == 'all' else '' }}>All years</option>
+                    {% for y in years %}
+                    <option value="{{ y }}" {{ 'selected' if selected_year == y|string else '' }}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+                <span class="option-hint">Only years in your dataset are shown.</span>
+            </div>
+        </div>
+        <label class="option-heading">Choose graphs to view</label>
+        <div class="checkbox-group" id="graph-checkboxes">
+            {% for key, label in graph_options %}
+            <label class="checkbox-label"><input type="checkbox" name="graphs" value="{{ key }}" class="graph-cb" {{ 'checked' if key in selected_graphs or not selected_graphs else '' }}> {{ label }}</label>
+            {% endfor %}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Apply</button>
+        </div>
+    </form>
+</div>
+
+<div class="metrics">
+    <div class="metric"><span>MAE</span> {{ metrics.mae }} °C</div>
+    <div class="metric"><span>RMSE</span> {{ metrics.rmse }} °C</div>
+</div>
+
+<div class="graph-grid">
+    {% if graphs.historical_temp is defined %}
+    <div class="graph-item">
+        <h3>Historical Temperature Trend </h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.historical_temp }}" alt="Historical Temperature">
+    </div>
+    {% endif %}
+    {% if graphs.actual_vs_predicted is defined %}
+    <div class="graph-item">
+        <h3>Actual vs Predicted Temperature</h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.actual_vs_predicted }}" alt="Actual vs Predicted">
+    </div>
+    {% endif %}
+    {% if graphs.humidity is defined %}
+    <div class="graph-item">
+        <h3>Humidity Trend </h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.humidity }}" alt="Humidity">
+    </div>
+    {% endif %}
+    {% if graphs.rainfall is defined %}
+    <div class="graph-item">
+        <h3>Rainfall Analysis </h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.rainfall }}" alt="Rainfall">
+    </div>
+    {% endif %}
+    {% if graphs.wind_speed is defined %}
+    <div class="graph-item">
+        <h3>Wind Speed Variation</h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.wind_speed }}" alt="Wind Speed">
+    </div>
+    {% endif %}
+    {% if graphs.distribution is defined %}
+    <div class="graph-item">
+        <h3>Weather Condition Distribution</h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.distribution }}" alt="Distribution">
+    </div>
+    {% endif %}
+    {% if graphs.error_analysis is defined %}
+    <div class="graph-item">
+        <h3>Error Analysis </h3>
+        <img class="graph" src="data:image/png;base64,{{ graphs.error_analysis }}" alt="Error Analysis">
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

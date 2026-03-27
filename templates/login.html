@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin Login - Weather Forecast{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 4rem auto;">
+    
+    <div class="project-name">
+        Climate Change Prediction System
+    </div>
+
+    <div class="card">
+        <h1 style="margin-top: 0; color: #38bdf8;">Login</h1>
+        <p style="color: #94a3b8;">
+            Login in to upload datasets and view weather predictions.
+        </p>
+
+        <form method="post" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus style="width: 100%;">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required style="width: 100%;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Login in
+            </button>
+        </form>
+
+        
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <a href="{{ url_for('signup') }}" style="color: #38bdf8;">Don't have an account? Sign up</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

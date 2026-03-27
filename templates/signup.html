@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Sign up - Weather Forecast{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 4rem auto;">
+    <div class="card">
+        <h1 style="margin-top: 0; color: #38bdf8;">Sign up</h1>
+        <p style="color: #94a3b8;">Create an account to upload datasets and view weather predictions.</p>
+
+        <form method="post" action="{{ url_for('signup') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus minlength="5" style="width: 100%;" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="5" style="width: 100%;" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required minlength="4" style="width: 100%;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Sign up</button>
+        </form>
+
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            <a href="{{ url_for('login') }}" style="color: #38bdf8;">Already have an account? Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

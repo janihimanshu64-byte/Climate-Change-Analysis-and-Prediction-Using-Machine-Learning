@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Weather Forecast{% endblock %}</title>
+    <style>
+    
+
+    .project-name {
+    text-align: center;
+    font-size: 1.3rem;        /* lower font size */
+    font-weight: 700;         /* bold but not heavy */
+    color: #e0f2fe;
+    margin: 0 auto 1.5rem;
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;      /* force one line */
+    overflow: hidden;
+    text-overflow: ellipsis;  /* safety on small screens */
+}
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; color: #e2e8f0; min-height: 100vh; background: #0f172a url('{{ url_for("static", filename="images/weather_bg.jpg") }}') no-repeat center center fixed; background-size: cover; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.75); z-index: -1; pointer-events: none; }
+        .navbar { background: #1e293b; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .navbar a { color: #94a3b8; text-decoration: none; margin-left: 1rem; }
+        .navbar a:hover { color: #38bdf8; }
+        .navbar .brand { font-weight: 700; color: #38bdf8; font-size: 1.2rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+        .flash { padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; }
+        .flash.success { background: #064e3b; color: #6ee7b7; }
+        .flash.error { background: #7f1d1d; color: #fca5a5; }
+        .flash.info { background: #1e3a5f; color: #93c5fd; }
+        .card { background: #1e293b; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn { display: inline-block; padding: 0.6rem 1.2rem; border-radius: 8px; border: none; cursor: pointer; font-size: 1rem; text-decoration: none; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn-primary { background: #0ea5e9; color: #fff; }
+        .btn-secondary { background: #475569; color: #e2e8f0; }
+        .btn-danger { background: #dc2626; color: #fff; }
+        input[type="text"], input[type="password"], input[type="file"], select { padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; min-width: 120px; }
+        label { display: block; margin-bottom: 0.25rem; color: #94a3b8; }
+        .form-group { margin-bottom: 1rem; }
+        .options-form .form-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 1.5rem; }
+        .options-form .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; width: 100%; }
+        .option-section { padding: 0.25rem 0; }
+        .option-heading { margin: 0 0 0.25rem 0; color: #38bdf8; font-size: 1rem; }
+        .option-desc { margin: 0 0 0.75rem 0; color: #64748b; font-size: 0.875rem; }
+        .option-row { margin-bottom: 1rem; }
+        .option-hint { display: block; margin-top: 0.25rem; color: #64748b; font-size: 0.8rem; }
+        .options-form .graph-options { flex: 1; min-width: 280px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; }
+        .checkbox-actions { margin-bottom: 0.5rem; }
+        .btn-small { padding: 0.35rem 0.7rem; font-size: 0.875rem; }
+        .checkbox-label { display: inline-flex; align-items: center; gap: 0.35rem; margin: 0; cursor: pointer; font-weight: normal; }
+        .checkbox-label input { width: auto; margin: 0; }
+        .options-form .submit-wrap { margin-bottom: 0; align-self: flex-end; }
+        .form-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #334155; }
+        img.graph { max-width: 100%; height: auto; border-radius: 8px; background: #0f172a; }
+        .graph-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+        .graph-item { background: #1e293b; padding: 1rem; border-radius: 12px; }
+        .graph-item h3 { margin-top: 0; color: #38bdf8; font-size: 1rem; }
+        .metrics { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .metric { background: linear-gradient(135deg, #1e3a5f, #1e293b); padding: 1rem 1.5rem; border-radius: 10px; }
+        .metric span { color: #38bdf8; font-weight: 700; font-size: 1.5rem; }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% if session.get('admin_logged_in') %}
+    <nav class="navbar">
+        <span class="brand">Weather Forecast System</span>
+        <div>
+            
+            
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary" style="padding: 0.4rem 0.8rem;">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
